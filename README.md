@@ -1,8 +1,8 @@
-# Veste AI 👗✨
+# Veste AI
 
 > Consultoria de estilo inteligente, Monte looks incríveis com as roupas que você já tem, powered by Gemini AI.
 
-## 📋 Sobre o Projeto
+## Sobre o Projeto
 
 **Veste AI** é um web app de consultoria de moda digital que usa inteligência artificial (Google Gemini) para sugerir combinações de roupas personalizadas com base nas peças que o usuário já possui e na ocasião desejada.
 
@@ -11,7 +11,7 @@
 - **Closet Inteligente Pro** (R$ 29,90/mês) — Sugestões diárias + consultoria 24h
 - **Guia Armário Cápsula** (R$ 49,90) — E-book interativo com 30 looks
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Tecnologia | Uso |
 |---|---|
@@ -21,7 +21,7 @@
 | Google Gemini API | IA generativa para sugestões de looks |
 | Google Fonts (Inter) | Tipografia moderna |
 
-## 📁 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 📁 veste-ai/
@@ -31,7 +31,7 @@
  └── 📄 README.md    — Este arquivo
 ```
 
-## ⚙️ Como Usar
+## Como Usar
 
 1. Clone o repositório:
    ```bash
@@ -40,18 +40,17 @@
 2. Abra o arquivo `index.html` no navegador.
 3. **Importante:** Para usar o chat com a IA, substitua `SUA_API_KEY` no arquivo `script.js` pela sua chave da [Google AI Studio](https://aistudio.google.com/apikey).
 
-## 🤖 Persona da IA
+## Persona da IA
 
 A assistente **Bia** é a Personal Stylist virtual do Veste AI. Ela responde apenas sobre moda, roupas e estilo, recusando educadamente outros assuntos.
 
-## 👥 Equipe
+## Equipe
 
 | Integrante | Responsabilidade |
 |---|---|
-| Joabe | HTML base + CSS Header/Hero |
-| Pedro Rodrigues | Seções Closet/Planos/Cadastro + CSS responsivo |
-| Luís Carlos | JavaScript, API Gemini + README |
+| Pedro Rodrigues | Seções Closet/Planos/Cadastro + CSS responsivo  |
+| Luís Carlos | JavaScript, API Gemini + README + CSS Header/Hero |
 
-## 📄 Licença
+##  Licença
 
 Projeto acadêmico — Faculdade Estadual Piauí (PIT) - Bacharelado em IA — AV3 2026.
