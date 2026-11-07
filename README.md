@@ -1,10 +1,10 @@
 # Veste AI
 
-> Consultoria de estilo inteligente, Monte looks incríveis com as roupas que você já tem, powered by Gemini AI.
+> Consultoria de estilo inteligente, Monte looks com as roupas que você já tem, com inteligência artificial
 
 ## Sobre o Projeto
 
-**Veste AI** é um web app de consultoria de moda digital que usa inteligência artificial (Google Gemini) para sugerir combinações de roupas personalizadas com base nas peças que o usuário já possui e na ocasião desejada.
+**Veste AI** é um web app de consultoria de moda digital que usa inteligência artificial (Google Gemini) para sugerir combinações de roupas personalizadas com base nas peças que o usuário já possui e na ocasião desejada, combinando o melhor look. O objetivo principal é oferecer uma opção de testar diferentes looks de forma rápida e prática, diminuindo o tempo de escolha do usuário. A ideia pode ser ofertada diretamente para o usuário final, quanto para o mercado de varejo de roupa e moda em geral. Neste protótipo, nos concentramos em criar uma versão mínima viável 100% utilizável. Nosso foco, será integrar um sistema de Realidade Aumentada (RV) para que, o usuário possa, literalmente, se vestir. 
 
 ### Produto Digital Oferecido
 - **Look Express** (R$ 14,90) — 5 combinações para evento único
