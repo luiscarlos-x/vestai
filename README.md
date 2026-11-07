@@ -40,6 +40,9 @@
 2. Abra o arquivo `index.html` no navegador.
 3. **Importante:** Para usar o chat com a IA, substitua `SUA_API_KEY` no arquivo `script.js` pela sua chave da [Google AI Studio](https://aistudio.google.com/apikey).
 
+## RENDER SERVER 
+ link: https://vesteai-e2wr.onrender.com/
+
 ## Persona da IA
 
 A assistente **Bia** é a Personal Stylist virtual do Veste AI. Ela responde apenas sobre moda, roupas e estilo, recusando educadamente outros assuntos.
