@@ -41,7 +41,9 @@
 3. **Importante:** Para usar o chat com a IA, substitua `SUA_API_KEY` no arquivo `script.js` pela sua chave da [Google AI Studio](https://aistudio.google.com/apikey).
 
 ## RENDER SERVER 
- link: https://vesteai-e2wr.onrender.com/
+  **Acesse o site Veste AI via Render**
+  
+ LINK: https://vesteai-e2wr.onrender.com/
 
 ## Persona da IA
 
