@@ -273,7 +273,11 @@ biaChatClose.addEventListener('click', () => {
 // 3. ASSISTENTE BIA — INTEGRAÇÃO GEMINI & GUARDA-ROUPA VIRTUAL
 // ============================================================
 
-const GEMINI_API_KEY = 'SUA_API_KEY';
+// Chave de API do Gemini (obtida via localStorage ou chave padrão decodificada)
+const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SUtyQmRjVGZyX0xkR3loaHdSWjlmdzZXbHJBdEdPcW5wckdJVEpGWE5ULWc=';
+const GEMINI_API_KEY = (typeof localStorage !== 'undefined' && localStorage.getItem('vesteai_gemini_key'))
+  ? localStorage.getItem('vesteai_gemini_key')
+  : (typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '');
 
 // Histórico de conversa mantido durante a sessão
 let chatHistory = [];
@@ -304,54 +308,75 @@ function gerarContextoGuardaRoupa() {
   return `PEÇAS DO GUARDA-ROUPA VIRTUAL DO USUÁRIO:\n${linhas.join('\n')}${avisoDestaque}`;
 }
 
-// Prompt de Sistema da Stylist Bia
+// Prompt de Sistema da Stylist Bia com Persona e Contexto do Veste AI
 function gerarSystemPrompt() {
   const inventario = gerarContextoGuardaRoupa();
 
-  return `Você é a Bia, Personal Stylist inteligente, elegante, calorosa e moderna do Veste AI.
-Seu objetivo é criar combinações de looks incríveis, harmoniosas e práticas sob medida para a ocasião ou dúvida do usuário.
+  return `Você é a Bia, Personal Stylist inteligente, elegante, calorosa, moderna e Guia de Experiência Oficial do Veste AI.
+Sua missão é tripla:
+1. Atuar como consultora de estilo pessoal e montar combinações de looks incríveis, harmoniosas e elegantes.
+2. Auxiliar nas dúvidas sobre os produtos e planos do site e oferecer suporte na navegação.
+3. Manter-se estritamente fiel ao tema de moda, roupas, estilo pessoal e ao ecossistema do Veste AI.
 
 ${inventario}
 
-DIRETRIZES DA CONSULTORIA DE ESTILO:
-1. OLHE SEMPRE O GUARDA-ROUPA VIRTUAL: Ao recomendar ou montar um look, você DEVE buscar e combinar prioritariamente as peças que constam no guarda-roupa virtual listado acima.
-2. Se o usuário marcou alguma peça com destaque (selecionada no carrossel), use-a obrigatoriamente como ponto central da combinação.
-3. Se faltar algum calçado ou acessório complementar essencial que não esteja cadastrado no armário, sugira de forma amigável com o que ele pode complementar.
-4. Estruture sua resposta com clareza editorial:
-   ✦ Look Recomendado (cite expressamente os nomes exatos das peças do guarda-roupa utilizadas)
+CONHECIMENTO COMPLETO DOS PRODUTOS & PACOTES DO SITE:
+• Look Express (R$ 14,90): Produto digital focado em evento único. Entrega 5 combinações completas geradas sob medida com paleta de cores ideal para a ocasião.
+• Closet Inteligente Pro (R$ 29,90/mês): Nossa assinatura mais popular. Dá acesso a guarda-roupa virtual ilimitado, sugestões diárias inteligentes baseadas no clima e consultoria de estilo 24h com você (Bia).
+• Guia Armário Cápsula (R$ 49,90): Pagamento único. E-book interativo com 30 looks versáteis montados com apenas 12 peças básicas essenciais, além de análise completa de estilo.
+
+ESTRUTURA E NAVEGAÇÃO DO SITE (SUPORTE AO VISITANTE):
+• Início (#inicio): Apresentação da plataforma e proposta de valor.
+• Meu Closet (#closet): Carrossel horizontal com as peças do guarda-roupa do usuário. Ao clicar numa peça, ela fica selecionada (com borda destacada e estrela) como peça central do look.
+• Botão "Montar guarda-roupa virtual": Localizado na seção #closet, abre a câmera ou galeria do dispositivo para adicionar fotos de roupas reais.
+• Benefícios (#beneficios): Apresenta os diferenciais do Veste AI (Guarda-Roupa Inteligente, Stylist Bia 24h, Economia Real e Cores & Harmonização).
+• Planos (#planos): Onde o usuário adquire ou assina os pacotes digitais.
+• Cadastro (#cadastro): Formulário de perfil de estilo que presenteia o usuário com 1 Look VIP gratuito.
+Sempre que for útil, indique ao visitante onde clicar ou rolar para encontrar o que procura no site.
+
+DIRETRIZES PARA RECOMENDAÇÃO DE LOOKS:
+1. Ao sugerir ou montar combinações, priorize expressamente as peças do guarda-roupa virtual listadas acima.
+2. Se o usuário marcou peças com destaque no carrossel, use-as obrigatoriamente como ponto central do visual.
+3. Se faltar algum calçado ou acessório que não esteja cadastrado, recomende com simpatia com o que complementar.
+4. Estruture sua resposta de consultoria editorial com elegância:
+   ✦ Look Recomendado (cite os nomes exatos das peças do guarda-roupa utilizadas)
    ✦ Calçados & Complementos
-   ✦ Dica de Ouro da Bia (truque de styling, paleta de cores ou ocasião)
-5. OBRIGATÓRIO NO FINAL: Inclua no final da sua resposta uma linha técnica discreta indicando as peças do guarda-roupa que você usou no look, exatamente neste formato:
+   ✦ Dica de Ouro da Bia (truque de styling, paleta cromática ou ocasião)
+5. OBRIGATÓRIO NO FINAL DO LOOK: Inclua na última linha técnica da resposta a tag discreta:
    [PEÇAS_LOOK: Nome da Peça 1, Nome da Peça 2]
-   (Os nomes devem ser exatamente idênticos aos cadastrados no guarda-roupa. Se nenhuma peça do closet foi usada, retorne [PEÇAS_LOOK: nenhuma]).
-6. Mantenha um tom profissional, amigável, autêntico e apaixonado por moda.`;
+   (com os nomes exatos das peças do armário usadas. Se nenhuma peça do closet foi usada ou se a mensagem for apenas suporte/dúvidas, coloque [PEÇAS_LOOK: nenhuma]).
+
+DIRETRIZ DE BLINDAGEM E ALINHAMENTO DE CONTEXTO:
+Se o visitante fizer perguntas que fujam totalmente do tema do site (como receitas culinárias, política, programação, esportes alheios, notícias gerais ou fofocas), recuse com delicadeza, muito charme e elegância de personal stylist. Explique com simpatia que seu foco exclusivo é moda, estilo e suporte ao Veste AI, e convide-o a montar um look ou conhecer nossos recursos.`;
 }
 
-// Chamada à API do Google Gemini com histórico conversacional
+// Chamada à API do Google Gemini (gemini-2.5-flash) com histórico conversacional
 async function consultarGemini(mensagemUsuario) {
   const systemPrompt = gerarSystemPrompt();
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-  // Monta o payload incluindo histórico recente para conversas contínuas
-  const contents = [
-    ...chatHistory,
-    {
-      role: 'user',
-      parts: [{ text: `${systemPrompt}\n\nPedido do usuário: ${mensagemUsuario}` }]
+  const payload = {
+    system_instruction: {
+      parts: [{ text: systemPrompt }]
+    },
+    contents: [
+      ...chatHistory,
+      {
+        role: 'user',
+        parts: [{ text: mensagemUsuario }]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 800
     }
-  ];
+  };
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: contents,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 800
-        }
-      })
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -361,13 +386,13 @@ async function consultarGemini(mensagemUsuario) {
     const data = await response.json();
     const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!texto) {
-      throw new Error('Conteúdo vazio');
+      throw new Error('Conteúdo vazio retornado pelo Gemini');
     }
 
-    // Salva o histórico de turnos
+    // Salva o histórico de turnos para conversas contínuas
     chatHistory.push({ role: 'user', parts: [{ text: mensagemUsuario }] });
     chatHistory.push({ role: 'model', parts: [{ text: texto }] });
-    if (chatHistory.length > 6) chatHistory = chatHistory.slice(-6);
+    if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
 
     return texto;
   } catch (err) {
@@ -420,34 +445,55 @@ function formatarMarkdown(txt) {
 // MOTOR DE CONTINGÊNCIA (FALLBACK LOCAL DINÂMICO)
 // ============================================================
 
-const RESPOSTA_PACOTES = `Nossos pacotes digitais:
-• Look Express: R$ 14,90 — 5 combinações completas para um evento único.
-• Closet Inteligente Pro: R$ 29,90/mês — guarda-roupa ilimitado, sugestões diárias por clima e consultoria 24h.
-• Guia Armário Cápsula: R$ 49,90 — e-book interativo com 30 looks usando 12 peças básicas.
+const RESPOSTA_PACOTES = `✦ Conheça os Produtos Digitais & Pacotes do Veste AI:
 
-Para montar um look agora, me diga para qual ocasião você vai!`;
+• Look Express (R$ 14,90): 5 combinações completas sob medida para um evento único com paleta de cores ideal.
+• Closet Inteligente Pro (R$ 29,90/mês): Nossa assinatura mais popular! Guarda-roupa virtual ilimitado, sugestões diárias por clima e consultoria 24h comigo (Bia).
+• Guia Armário Cápsula (R$ 49,90): E-book interativo com 30 looks usando apenas 12 peças básicas essenciais.
+
+Você pode assinar ou adquirir na seção Planos (#planos) do site!`;
 
 function responderBiaFallback(texto) {
   const t = normalizar(texto);
 
-  if (/\b(preco|precos|quanto|valor|valores|pacote|pacotes|plano|planos|assinar|assinatura|comprar|guia|express)\b/.test(t)) {
+  // 1. Dúvidas sobre produtos e planos
+  if (/\b(preco|precos|quanto|valor|valores|pacote|pacotes|plano|planos|assinar|assinatura|comprar|guia|express|pro)\b/.test(t)) {
     return RESPOSTA_PACOTES;
   }
 
-  if (/\b(oi|ola|bom dia|boa tarde|boa noite)\b/.test(t)) {
-    return `Olá! Sou a Bia, sua Personal Stylist ✨\nTenho acesso ao seu guarda-roupa virtual com ${closetItems.length} peças disponíveis. Me diga para qual evento você vai que monto sua combinação!`;
+  // 2. Dúvidas sobre o funcionamento do site e navegação
+  if (/\b(como funciona|como usar|adicionar|roupa|roupas|foto|fotos|carrossel|upload|site|ajuda|suporte|navegar|onde clico)\b/.test(t)) {
+    return `O Veste AI foi pensado para ser prático e intuitivo! ✨
+
+1. **Meu Closet (#closet)**: Navegue pelo carrossel para ver suas roupas. Toque em qualquer peça para destacá-la com estrela como peça-chave do look.
+2. **Montar guarda-roupa virtual**: Clique no botão laranja na seção Meu Closet para enviar fotos reais das suas roupas pela câmera ou galeria.
+3. **Benefícios (#beneficios)**: Descubra todas as vantagens da moda inteligente e economia real.
+4. **Planos (#planos)**: Escolha seu pacote ou assinatura de consultoria contínua.
+5. **Cadastro (#cadastro)**: Preencha seu perfil de estilo e ganhe na hora 1 Look VIP gratuito!
+
+Quer montar um look agora? Me diga para qual evento você vai!`;
   }
 
-  // Utiliza as peças selecionadas pelo usuário ou as peças disponíveis no closet
+  // 3. Blindagem de contexto: recusa educada de assuntos fora do tema
+  if (/\b(futebol|jogo|receita|bolo|politica|programacao|codigo|python|java|javascript|filme|musica|tempo hoje|previsao)\b/.test(t) && !/\b(look|roupa|vestir|estilo|moda)\b/.test(t)) {
+    return `Como sua Personal Stylist e Guia Oficial no Veste AI, meu foco exclusivo é transformar seu visual, seu guarda-roupa e te ajudar a aproveitar ao máximo o nosso site! ✨\n\nQue tal falarmos sobre um look elegante para o seu dia ou tirar alguma dúvida sobre o Veste AI?`;
+  }
+
+  // 4. Saudações
+  if (/\b(oi|ola|bom dia|boa tarde|boa noite)\b/.test(t)) {
+    return `Olá! Sou a Bia, sua Personal Stylist e Guia Oficial do Veste AI ✨\nTenho acesso ao seu guarda-roupa virtual com ${closetItems.length} peças cadastradas. Posso te ajudar com dúvidas sobre o site, nossos planos ou montar a combinação ideal para você. Para onde você vai hoje?`;
+  }
+
+  // 5. Utiliza as peças selecionadas pelo usuário ou as peças disponíveis no closet
   const selecionadas = getPecasSelecionadas();
   const pecasUsar = selecionadas.length > 0 ? selecionadas : closetItems.slice(0, 3);
   const nomesPecas = pecasUsar.map(p => p.nome);
 
   if (nomesPecas.length > 0) {
-    return `✦ Look Recomendado: Recomendo combinar ${nomesPecas.join(' + ')}.\n✦ Calçados & Complementos: Use um calçado em tom neutro para manter a sofisticação.\n✦ Toque de Estilo: Dobre as mangas e adicione acessórios delicados para dar charme.\n\n[PEÇAS_LOOK: ${nomesPecas.join(', ')}]`;
+    return `✦ Look Recomendado: Recomendo combinar ${nomesPecas.join(' + ')}.\n✦ Calçados & Complementos: Use um calçado em tom neutro para manter a sofisticação.\n✦ Dica de Ouro da Bia: Dobre as mangas e adicione acessórios delicados para dar charme.\n\n[PEÇAS_LOOK: ${nomesPecas.join(', ')}]`;
   }
 
-  return 'Olá! Posso criar uma combinação sob medida para você com as roupas do seu guarda-roupa virtual. Para onde você vai hoje?';
+  return 'Olá! Sou a Bia, sua Personal Stylist no Veste AI. Posso criar uma combinação sob medida para você ou te orientar no site. Como posso te ajudar hoje?';
 }
 
 // --- Envio de mensagens com IA Gemini ---
