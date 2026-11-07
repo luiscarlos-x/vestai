@@ -273,11 +273,24 @@ biaChatClose.addEventListener('click', () => {
 // 3. ASSISTENTE BIA — INTEGRAÇÃO GEMINI & GUARDA-ROUPA VIRTUAL
 // ============================================================
 
-// Chave de API do Gemini (obtida via localStorage ou chave padrão decodificada)
+// Chave de API do Gemini (obtida via URL param, localStorage ou chave padrão decodificada)
 const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SUtyQmRjVGZyX0xkR3loaHdSWjlmdzZXbHJBdEdPcW5wckdJVEpGWE5ULWc=';
-const GEMINI_API_KEY = (typeof localStorage !== 'undefined' && localStorage.getItem('vesteai_gemini_key'))
-  ? localStorage.getItem('vesteai_gemini_key')
-  : (typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '');
+
+function obterChaveGemini() {
+  try {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlKey = params.get('gemini_key');
+      if (urlKey) {
+        localStorage.setItem('vesteai_gemini_key', urlKey);
+        return urlKey;
+      }
+      const localKey = localStorage.getItem('vesteai_gemini_key');
+      if (localKey) return localKey;
+    }
+  } catch (e) {}
+  return typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '';
+}
 
 // Histórico de conversa mantido durante a sessão
 let chatHistory = [];
@@ -352,8 +365,9 @@ Se o visitante fizer perguntas que fujam totalmente do tema do site (como receit
 
 // Chamada à API do Google Gemini (gemini-2.5-flash) com histórico conversacional
 async function consultarGemini(mensagemUsuario) {
+  const apiKey = obterChaveGemini();
   const systemPrompt = gerarSystemPrompt();
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   const payload = {
     system_instruction: {
@@ -380,7 +394,9 @@ async function consultarGemini(mensagemUsuario) {
     });
 
     if (!response.ok) {
-      throw new Error(`Status ${response.status}`);
+      const errTexto = await response.text();
+      console.error(`[Gemini API] Erro HTTP ${response.status}:`, errTexto);
+      throw new Error(`Status ${response.status}: ${errTexto}`);
     }
 
     const data = await response.json();

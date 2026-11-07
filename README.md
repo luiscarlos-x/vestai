@@ -48,7 +48,7 @@ A assistente **Bia** é a Personal Stylist virtual do Veste AI. Ela responde ape
 
 | Integrante | Responsabilidade |
 |---|---|
-| Pedro Rodrigues | Seções Closet/Planos/Cadastro + CSS responsivo  |
+| Pedro Rodrigues | Seções Closet/Planos/Cadastro + CSS responsivo |
 | Luís Carlos | JavaScript, API Gemini + README + CSS Header/Hero |
 
 ##  Licença
