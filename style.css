@@ -713,6 +713,14 @@ nav#nav-menu a.nav-link:hover {
   margin-bottom: 4px;
 }
 
+.beneficio-icon img,
+.beneficio-icon-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
 .beneficio-card h3 {
   font-size: 19px;
   color: var(--text);
